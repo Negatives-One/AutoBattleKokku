@@ -27,23 +27,15 @@ namespace AutoBattle
                 //store the player choice in a variable
                 string choice = Console.ReadLine();
 
-                switch (choice)
+                //Checking if player choice is valid and creating a Player Character
+                if (choice == "1" || choice == "2" || choice == "3" || choice == "4")
                 {
-                    case "1":
-                        CreatePlayerCharacter(Int32.Parse(choice));
-                        break;
-                    case "2":
-                        CreatePlayerCharacter(Int32.Parse(choice));
-                        break;
-                    case "3":
-                        CreatePlayerCharacter(Int32.Parse(choice));
-                        break;
-                    case "4":
-                        CreatePlayerCharacter(Int32.Parse(choice));
-                        break;
-                    default:
-                        GetPlayerChoice();
-                        break;
+                    CreatePlayerCharacter(Int32.Parse(choice));
+                }
+                else
+                {
+                    Console.WriteLine("\n\nInvalid value!\n\n");
+                    GetPlayerChoice();
                 }
             }
 
@@ -167,7 +159,6 @@ namespace AutoBattle
                 Console.Write($"{random}\n");
                 if (!RandomLocation.ocupied)
                 {
-                    EnemyCurrentLocation = RandomLocation;
                     RandomLocation.ocupied = true;
                     grid.grids[random] = RandomLocation;
                     enemyCharacter.currentBox = grid.grids[random];
