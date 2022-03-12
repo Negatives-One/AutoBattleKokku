@@ -39,40 +39,42 @@ namespace AutoBattle
                 }
             }
 
+            //Create player and proceed to create an enemy
             void CreatePlayerCharacter(int classIndex)
             {
-               
+
                 CharacterClass characterClass = (CharacterClass)classIndex;
                 Console.WriteLine($"Player Class Choice: {characterClass}");
                 playerCharacter = new Character(characterClass);
-                playerCharacter.Health = 100;
-                playerCharacter.BaseDamage = 20;
-                playerCharacter.PlayerIndex = 0;
-                
-                CreateEnemyCharacter();
+                //Populate character variables
+                ClassData.SetCharacterStats(playerCharacter);
+                playerCharacter.playerIndex = 0;
+                allPlayers.Add(playerCharacter);
 
+                CreateEnemyCharacter();
             }
 
+            //Creates enemy and start the game
             void CreateEnemyCharacter()
             {
                 //randomly choose the enemy class and set up vital variables
-                var rand = new Random();
-                int randomInteger = rand.Next(1, 4);
+                int randomInteger = GetRandomInt(1, 5);
                 CharacterClass enemyClass = (CharacterClass)randomInteger;
                 Console.WriteLine($"Enemy Class Choice: {enemyClass}");
                 enemyCharacter = new Character(enemyClass);
-                enemyCharacter.Health = 100;
-                playerCharacter.BaseDamage = 20;
-                playerCharacter.PlayerIndex = 1;
-                StartGame();
+                //Populate character variables
+                ClassData.SetCharacterStats(enemyCharacter);
+                enemyCharacter.playerIndex = 1;
+                allPlayers.Add(enemyCharacter);
 
+                StartGame();
             }
 
             void StartGame()
             {
                 //populates the character variables and targets
-                enemyCharacter.Target = playerCharacter;
-                playerCharacter.Target = enemyCharacter;
+                enemyCharacter.target = playerCharacter;
+                playerCharacter.target = enemyCharacter;
                 allPlayers.Add(playerCharacter);
                 allPlayers.Add(enemyCharacter);
                 AlocatePlayers();
@@ -98,10 +100,10 @@ namespace AutoBattle
 
             void HandleTurn()
             {
-                if(playerCharacter.Health == 0)
+                if(playerCharacter.health == 0)
                 {
                     return;
-                } else if (enemyCharacter.Health == 0)
+                } else if (enemyCharacter.health == 0)
                 {
                     Console.Write(Environment.NewLine + Environment.NewLine);
 
