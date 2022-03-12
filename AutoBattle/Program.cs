@@ -72,12 +72,11 @@ namespace AutoBattle
 
             void StartGame()
             {
-                //populates the character variables and targets
+                //Set the character targets
                 enemyCharacter.target = playerCharacter;
                 playerCharacter.target = enemyCharacter;
-                allPlayers.Add(playerCharacter);
-                allPlayers.Add(enemyCharacter);
-                AlocatePlayers();
+                //Place the characters
+                AlocateCharacters();
                 StartTurn();
 
             }
@@ -130,27 +129,28 @@ namespace AutoBattle
                 return index;
             }
 
-            void AlocatePlayers()
+            void AlocateCharacters()
             {
-                AlocatePlayerCharacter();
-
+                AlocateCharacter(playerCharacter);
+                AlocateCharacter(enemyCharacter);
             }
 
-            void AlocatePlayerCharacter()
+            //Sets a Character cell to a random cell
+            void AlocateCharacter(Character character)
             {
-                int random = 0;
-                GridBox RandomLocation = (grid.grids.ElementAt(random));
-                Console.Write($"{random}\n");
-                if (!RandomLocation.ocupied)
+                int randomValue = GetRandomInt(0, grid.grids.Count);
+
+                GridBox randomLocation = (grid.grids.ElementAt(randomValue));
+                if (!randomLocation.ocupied)
                 {
-                    GridBox PlayerCurrentLocation = RandomLocation;
-                    RandomLocation.ocupied = true;
-                    grid.grids[random] = RandomLocation;
-                    playerCharacter.currentBox = grid.grids[random];
-                    AlocateEnemyCharacter();
-                } else
+                    randomLocation.ocupied = true;
+                    randomLocation.character = character;
+                    grid.grids[randomValue] = randomLocation;
+                    character.currentBox = grid.grids[randomValue];
+                }
+                else
                 {
-                    AlocatePlayerCharacter();
+                    AlocateCharacter(character);
                 }
             }
 
