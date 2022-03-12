@@ -97,19 +97,42 @@ namespace AutoBattle
 
             void HandleTurn()
             {
-                if(playerCharacter.health == 0)
-                {
-                    return;
-                } else if (enemyCharacter.health == 0)
+                //Checks if enemyCharacter won
+                if (playerCharacter.health <= 0f && enemyCharacter.health > 0f)
                 {
                     Console.Write(Environment.NewLine + Environment.NewLine);
 
-                    // endgame?
+                    Console.WriteLine($"Player {playerCharacter.name}{playerCharacter.playerIndex} Morreu");
+                    Console.WriteLine($"Player {enemyCharacter.name}{enemyCharacter.playerIndex} Venceu");
+
+                    Console.Write(Environment.NewLine + Environment.NewLine);
+                    return;
+                }
+                //Checks if playerCharacter won
+                else if (enemyCharacter.health <= 0f && playerCharacter.health > 0f)
+                {
+                    Console.Write(Environment.NewLine + Environment.NewLine);
+
+                    Console.WriteLine($"Player {enemyCharacter.name}{enemyCharacter.playerIndex} Morreu");
+                    Console.WriteLine($"Player {playerCharacter.name}{playerCharacter.playerIndex} Venceu");
 
                     Console.Write(Environment.NewLine + Environment.NewLine);
 
                     return;
-                } else
+                }
+                //Check if it was a draw
+                else if (enemyCharacter.health <= 0f && playerCharacter.health <= 0f)
+                {
+                    Console.Write(Environment.NewLine + Environment.NewLine);
+
+                    Console.WriteLine($"Player {playerCharacter.name}{playerCharacter.playerIndex} Morreu");
+                    Console.WriteLine($"Player {enemyCharacter.name}{enemyCharacter.playerIndex} Morreu");
+                    Console.WriteLine($"DRAW!!!");
+
+                    Console.Write(Environment.NewLine + Environment.NewLine);
+                }
+                //The game continues
+                else
                 {
                     Console.Write(Environment.NewLine + Environment.NewLine);
                     Console.WriteLine("Click on any key to start the next turn...\n");
@@ -120,6 +143,7 @@ namespace AutoBattle
                 }
             }
 
+            //Return a random integer in a specified range
             int GetRandomInt(int min, int max)
             {
                 var rand = new Random();
@@ -150,26 +174,6 @@ namespace AutoBattle
                 {
                     AlocateCharacter(character);
                 }
-            }
-
-            void AlocateEnemyCharacter()
-            {
-                int random = 24;
-                GridBox RandomLocation = (grid.grids.ElementAt(random));
-                Console.Write($"{random}\n");
-                if (!RandomLocation.ocupied)
-                {
-                    RandomLocation.ocupied = true;
-                    grid.grids[random] = RandomLocation;
-                    enemyCharacter.currentBox = grid.grids[random];
-                    grid.DrawBattlefield(5 , 5);
-                }
-                else
-                {
-                    AlocateEnemyCharacter();
-                }
-
-                
             }
 
             //Sets Character's speed, influences who attacks first
