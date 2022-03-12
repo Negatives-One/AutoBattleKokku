@@ -1,21 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AutoBattle
+﻿namespace AutoBattle
 {
+    /// <summary>Contains useful structures for Character and Grid</summary>
     public class Types
     {
-
-        public struct CharacterClassSpecific
-        {
-            CharacterClass CharacterClass;
-            float hpModifier;
-            float ClassDamage;
-            CharacterSkills[] skills;
-
-        }
-
         /// <summary>
         /// Cell that constitutes the battlefield
         /// </summary>
@@ -35,14 +22,9 @@ namespace AutoBattle
             }
 
         }
-
-        public struct CharacterSkills
-        {
-            string Name;
-            float damage;
-            float damageMultiplier;
-        }
-
+        /// <summary>
+        /// Possible character classes
+        /// </summary>
         public enum CharacterClass : uint
         {
             Paladin = 1,
@@ -50,7 +32,6 @@ namespace AutoBattle
             Cleric = 3,
             Archer = 4
         }
-
         /// <summary>
         /// Simple representation of a two-dimensional vector of integers
         /// </summary>
