@@ -81,14 +81,12 @@ namespace AutoBattle
 
             }
 
-            void StartTurn(){
+            //Sets characters speed and then performs character actions
+            void StartTurn()
+            {
 
-                if (currentTurn == 0)
-                {
-                    //AllPlayers.Sort();  
-                }
-
-                foreach(Character character in allPlayers)
+                RollTurnSpeed();
+                foreach (Character character in allPlayers)
                 {
                     character.StartTurn(grid);
                 }
@@ -164,7 +162,7 @@ namespace AutoBattle
                     RandomLocation.ocupied = true;
                     grid.grids[random] = RandomLocation;
                     enemyCharacter.currentBox = grid.grids[random];
-                    grid.drawBattlefield(5 , 5);
+                    grid.DrawBattlefield(5 , 5);
                 }
                 else
                 {
@@ -174,6 +172,27 @@ namespace AutoBattle
                 
             }
 
+            //Sets Character's speed, influences who attacks first
+            void RollTurnSpeed()
+            {
+                playerCharacter.speed = GetRandomInt(0, 11);
+                enemyCharacter.speed = GetRandomInt(0, 11);
+
+                Console.WriteLine($"Player {playerCharacter.name}{playerCharacter.playerIndex} rolled {playerCharacter.speed}\n\n");
+                Console.WriteLine($"Player {enemyCharacter.name}{enemyCharacter.playerIndex} rolled {enemyCharacter.speed}\n\n");
+
+                allPlayers.Clear();
+                if (playerCharacter.speed > enemyCharacter.speed)
+                {
+                    allPlayers.Add(playerCharacter);
+                    allPlayers.Add(enemyCharacter);
+                }
+                else
+                {
+                    allPlayers.Add(enemyCharacter);
+                    allPlayers.Add(playerCharacter);
+                }
+            }
         }
     }
 }
