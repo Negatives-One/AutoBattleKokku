@@ -4,6 +4,7 @@ using static AutoBattle.Types;
 
 namespace AutoBattle
 {
+    /// <summary>Represents battlefield where units will fight each other</summary>
     public class Grid
     {
         public List<GridBox> grids = new List<GridBox>();
@@ -90,5 +91,6 @@ namespace AutoBattle
 
             return showValue;
         }
+
     }
 }
