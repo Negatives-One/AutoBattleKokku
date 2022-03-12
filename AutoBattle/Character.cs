@@ -3,6 +3,7 @@ using static AutoBattle.Types;
 
 namespace AutoBattle
 {
+    /// <summary>Represents the units that will fight each other on the battlefield</summary>
     public class Character
     {
         public string name { get; set; }
@@ -35,6 +36,7 @@ namespace AutoBattle
             }
         }
 
+        /// <summary>Performs character behavior in one turn</summary>
         public void StartTurn(Grid battlefield)
         {
             if (paralized) //If the character is paralyzed, skip the turn
@@ -121,11 +123,19 @@ namespace AutoBattle
         }
 
         /// <summary>Makes the Character attack its target.</summary>
-        public void Attack(Character target)
+        private void Attack(Character target)
         {
-            var rand = new Random();
-            target.TakeDamage(rand.Next(0, (int)baseDamage));
-            Console.WriteLine($"Player {playerIndex} is attacking the player {target.playerIndex} and did {baseDamage} damage\n");
+            Random rand = new Random();
+            //Roll damage
+            float damageDealt = ((float)rand.NextDouble() * (baseDamage - 0f) + 0f) * damageMultiplier;
+            target.TakeDamage(damageDealt);
+            Console.WriteLine($"Player {name}{playerIndex} is attacking the player {this.target.name}{target.playerIndex} and did {damageDealt} damage\n");
+            Console.WriteLine($"Player {target.name}{target.playerIndex} has {target.health} health\n");
+            if (damageDealt > baseDamage)
+            {
+                target.paralized = true;
+                Console.WriteLine($"Player {name}{playerIndex} paralized {this.target.name}{target.playerIndex}\n\n");
+            }
         }
     }
 }
