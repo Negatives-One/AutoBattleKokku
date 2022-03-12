@@ -9,7 +9,7 @@ namespace AutoBattle
     {
         static void Main(string[] args)
         {
-            Grid grid = new Grid(5, 5);
+            Grid grid = new Grid(10, 10);
 
             Character playerCharacter;
             Character enemyCharacter;

@@ -40,84 +40,53 @@ namespace AutoBattle
 
         public void StartTurn(Grid battlefield)
         {
+            if (paralized) //If the character is paralyzed, skip the turn
+            {
+                Console.WriteLine($"Player {name}{playerIndex} is paralized and can't attack or move.");
+                paralized = false;
+                return;
+            }
+            else if (CheckCloseTargets(battlefield)) //If there are targets nearby then attack
+            {
+                Attack(target);
+                return;
+            }
 
-        //    if (CheckCloseTargets(battlefield)) 
-        //    {
-        //        Attack(target);
-                
-
-        //        return;
-        //    }
-        //    else
-        //    {   // if there is no target close enough, calculates in wich direction this character should move to be closer to a possible target
-        //        /*if(this.currentBox.position.x > target.currentBox.position.x)
-        //        {
-        //            if ((battlefield.grids.Exists(x => x.Index == currentBox.Index - 1)))
-        //            {
-        //                currentBox.ocupied = false;
-        //                battlefield.grids[currentBox.Index] = currentBox;
-        //                currentBox = (battlefield.grids.Find(x => x.Index == currentBox.Index - 1));
-        //                currentBox.ocupied = true;
-        //                battlefield.grids[currentBox.Index] = currentBox;
-        //                Console.WriteLine($"Player {playerIndex} walked left\n");
-        //                battlefield.drawBattlefield(5, 5);
-
-        //                return;
-        //            }
-        //        } else if(currentBox.xIndex < target.currentBox.xIndex)
-        //        {
-        //            currentBox.ocupied = false;
-        //            battlefield.grids[currentBox.Index] = currentBox;
-        //            currentBox = (battlefield.grids.Find(x => x.Index == currentBox.Index + 1));
-        //            currentBox.ocupied = true;
-        //            return;
-        //            battlefield.grids[currentBox.Index] = currentBox;
-        //            Console.WriteLine($"Player {playerIndex} walked right\n");
-        //            battlefield.drawBattlefield(5, 5);
-        //        }
-
-        //        if (this.currentBox.yIndex > target.currentBox.yIndex)
-        //        {
-        //            battlefield.drawBattlefield(5, 5);
-        //            this.currentBox.ocupied = false;
-        //            battlefield.grids[currentBox.Index] = currentBox;
-        //            this.currentBox = (battlefield.grids.Find(x => x.Index == currentBox.Index - battlefield.xLenght));
-        //            this.currentBox.ocupied = true;
-        //            battlefield.grids[currentBox.Index] = currentBox;
-        //            Console.WriteLine($"Player {playerIndex} walked up\n");
-        //            return;
-        //        }
-        //        else if(this.currentBox.yIndex < target.currentBox.yIndex)
-        //        {
-        //            this.currentBox.ocupied = true;
-        //            battlefield.grids[currentBox.Index] = this.currentBox;
-        //            this.currentBox = (battlefield.grids.Find(x => x.Index == currentBox.Index + battlefield.xLenght));
-        //            this.currentBox.ocupied = false;
-        //            battlefield.grids[currentBox.Index] = currentBox;
-        //            Console.WriteLine($"Player {playerIndex} walked down\n");
-        //            battlefield.drawBattlefield(5, 5);
-
-        //            return;
-        //        }*/
-        //    }
         }
 
-        // Check in x and y directions if there is any character close enough to be a target.
-        //bool CheckCloseTargets(Grid battlefield)
-        //{
-        //    bool left = (battlefield.grids.Find(x => x.Index == currentBox.Index - 1).ocupied);
-        //    bool right = (battlefield.grids.Find(x => x.Index == currentBox.Index + 1).ocupied);
-        //    bool up = (battlefield.grids.Find(x => x.Index == currentBox.Index + battlefield.xLenght).ocupied);
-        //    bool down = (battlefield.grids.Find(x => x.Index == currentBox.Index - battlefield.xLenght).ocupied);
+        /// <summary>Checks if there is a valid target in neighboring cells.</summary>
+        public bool CheckCloseTargets(Grid battlefield)
+        {
+            bool left = false;
+            bool right = false;
+            bool up = false;
+            bool down = false;
 
-        //    if (left & right & up & down) 
-        //    {
-        //        return true;
-        //    }
-        //    return false; 
-        //}
+            //checking various cells based on Character's attackRange
+            for (int i = 1; i <= attackRange; i++)
+            {
+                if (left == false)
+                    left = battlefield.grids.Find(x => x.position.x == currentBox.position.x - i && x.position.y == currentBox.position.y).ocupied;
+                if (right == false)
+                    right = battlefield.grids.Find(x => x.position.x == currentBox.position.x + i && x.position.y == currentBox.position.y).ocupied;
+                if (up == false)
+                    up = battlefield.grids.Find(x => x.position.y == currentBox.position.y - i && x.position.x == currentBox.position.x).ocupied;
+                if (down == false)
+                    down = battlefield.grids.Find(x => x.position.y == currentBox.position.y + i && x.position.x == currentBox.position.x).ocupied;
+            }
 
-        public void Attack (Character target)
+            if (left || right || up || down)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>Makes the Character attack its target.</summary>
+        public void Attack(Character target)
         {
             var rand = new Random();
             target.TakeDamage(rand.Next(0, (int)baseDamage));
