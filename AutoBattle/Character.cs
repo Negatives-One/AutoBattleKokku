@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 using static AutoBattle.Types;
 
 namespace AutoBattle
@@ -51,7 +48,45 @@ namespace AutoBattle
                 Attack(target);
                 return;
             }
+            else
+            {   // if there is no target close enough, calculates in wich direction this character should move to be closer to a possible target
+                IntVector2 direction = new IntVector2(0, 0);
+                direction.GetDirection(currentBox.position, target.currentBox.position);
+                Move(direction, battlefield);
+                return;
+            }
+        }
 
+        /// <summary>Makes the Character move around the battlefield</summary>
+        private void Move(IntVector2 dir, Grid field)
+        {
+            //Limiting to only one axis of movement
+            if (dir.x != 0 && dir.y != 0)
+            {
+                Random rand = new Random();
+                bool moveX = rand.Next() > (Int32.MaxValue / 2);
+                if (moveX)
+                    dir.y = 0;
+                else
+                    dir.x = 0;
+            }
+            //Updating Character and Grid cells
+            GridBox nextBox = field.grids.Find(x => x.position.x == currentBox.position.x + dir.x && x.position.y == currentBox.position.y + dir.y);
+            if (!nextBox.ocupied)
+            {
+                currentBox.ocupied = false;
+                currentBox.character = null;
+                field.grids[currentBox.index] = currentBox;
+
+                currentBox = nextBox;
+                currentBox.ocupied = true;
+                currentBox.character = this;
+
+                field.grids[currentBox.index] = currentBox;
+
+                Console.WriteLine($"Player {name}{playerIndex} walked Vector({dir.x}, {dir.y}) direction\n");
+                field.DrawBattlefield(field.size.x, field.size.y);
+            }
         }
 
         /// <summary>Checks if there is a valid target in neighboring cells.</summary>
